@@ -16,13 +16,14 @@ namespace ByteBankImportacaoExportacao
             // TestaFileStream();           
             // ExercicioTeste();
             // TestandoEncoding();
-            ExerciciosRegex();
+             ExerciciosRegex();
             //TestandoUsing();
             Console.ReadLine();
         }
 
         static void ExerciciosRegex()
         {
+            /*Ainda não esta funcionando como deve ser. Dar uma olhadmais tarde!!!*/
             var enderecoDoArquivo = "RegexExercicio.txt";
 
             using (var fluxoAquivo = new FileStream(enderecoDoArquivo, FileMode.Open))
@@ -33,28 +34,26 @@ namespace ByteBankImportacaoExportacao
                 {
                     numeroDeBytesLidos = fluxoAquivo.Read(buffer, 0, 1024);
 
-                    RegexTeste(buffer);
+                    RegexTeste(buffer, numeroDeBytesLidos);
 
                 }
             }
         }
 
-        static void RegexTeste(byte[] bytes)
+        static void RegexTeste(byte[] bytes, int bytesLidos)
         {
             var utf8 = Encoding.UTF8;
             //Retorna uma cadeia de caracteres.
             
             //375 4644 -> Padrão do texto
             string padrao = "[0-9]{3} [0-9]{4}";
-            string texto = utf8.GetString(bytes);
+            string texto = utf8.GetString(bytes,0, bytesLidos);
                                        
             var MatchesEncontrado = Regex.Matches(texto, padrao);
 
             foreach (Match match in MatchesEncontrado)
-            {
-                GroupCollection groups = match.Groups;
-                Console.WriteLine("\nIndice: {0}", groups[0].Index);
-                Console.Write("Agencia e Numero: {0}",groups[0].Value);
+            {                
+                Console.WriteLine("Agencia e Numero: {0}",match.Value);
             }
         }
 
@@ -106,7 +105,7 @@ namespace ByteBankImportacaoExportacao
                 while (numeroDeBytesLidos != 0)
                 {
                     numeroDeBytesLidos = fluxoAquivo.Read(buffer, 0, 1024);
-                    EscreverNaTelaTexto(buffer);
+                    EscreverNaTelaTexto(buffer,numeroDeBytesLidos);
 
                 }
             }
@@ -128,7 +127,7 @@ namespace ByteBankImportacaoExportacao
             while (numeroDeBytesLidos != 0)
             {
                 numeroDeBytesLidos = fluxoAquivo.Read(buffer, 0, 1024);
-                EscreverNaTelaTexto(buffer);
+                EscreverNaTelaTexto(buffer,numeroDeBytesLidos);
 
             }
             //O arquivo esta sendo fechado e liberando acesso para o sistema
@@ -160,7 +159,7 @@ namespace ByteBankImportacaoExportacao
             }
         }
 
-        static void EscreverNaTelaTexto(byte[] bytes)
+        static void EscreverNaTelaTexto(byte[] bytes, int bytesLidos)
         {
             //Formas de realizar a transformação
             //var utf8 = new UTF8Encoding();
@@ -169,7 +168,7 @@ namespace ByteBankImportacaoExportacao
             //O "Defaut" é o formato padrao do meu Sistema Operacional
             var utf8 = Encoding.Default;
 
-            Console.Write(utf8.GetString(bytes));
+            Console.Write(utf8.GetString(bytes,0,bytesLidos));
 
         }
 
