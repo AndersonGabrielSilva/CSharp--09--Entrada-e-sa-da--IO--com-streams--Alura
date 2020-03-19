@@ -15,6 +15,7 @@ namespace ByteBankImportacaoExportacao
             // TestaFileStream();           
             // ExercicioTeste();
             // TestandoEncoding();
+
             TestandoUsing();
             Console.ReadLine();
         }
