@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;//IO = Input e Output
+using System.Text.RegularExpressions;
 
 namespace ByteBankImportacaoExportacao
 {
@@ -15,9 +16,46 @@ namespace ByteBankImportacaoExportacao
             // TestaFileStream();           
             // ExercicioTeste();
             // TestandoEncoding();
-
-            TestandoUsing();
+            ExerciciosRegex();
+            //TestandoUsing();
             Console.ReadLine();
+        }
+
+        static void ExerciciosRegex()
+        {
+            var enderecoDoArquivo = "RegexExercicio.txt";
+
+            using (var fluxoAquivo = new FileStream(enderecoDoArquivo, FileMode.Open))
+            {
+                var buffer = new byte[1024];
+                var numeroDeBytesLidos = -1;
+                while (numeroDeBytesLidos != 0)
+                {
+                    numeroDeBytesLidos = fluxoAquivo.Read(buffer, 0, 1024);
+
+                    RegexTeste(buffer);
+
+                }
+            }
+        }
+
+        static void RegexTeste(byte[] bytes)
+        {
+            var utf8 = Encoding.UTF8;
+            //Retorna uma cadeia de caracteres.
+            
+            //375 4644 -> Padrão do texto
+            string padrao = "[0-9]{3} [0-9]{4}";
+            string texto = utf8.GetString(bytes);
+                                       
+            var MatchesEncontrado = Regex.Matches(texto, padrao);
+
+            foreach (Match match in MatchesEncontrado)
+            {
+                GroupCollection groups = match.Groups;
+                Console.WriteLine("\nIndice: {0}", groups[0].Index);
+                Console.Write("Agencia e Numero: {0}",groups[0].Value);
+            }
         }
 
         static void ExercicioTeste()
@@ -43,7 +81,6 @@ namespace ByteBankImportacaoExportacao
 
             var bytesLidos = fs.Read(buffer, 0, 1024);
             var conteudoArquivo = encoding.GetString(buffer, 0, bytesLidos);
-
 
             Console.Write(conteudoArquivo);
         }
