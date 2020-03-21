@@ -17,6 +17,7 @@ namespace ByteBankImportacaoExportacao.Modelos
         {
             Agencia = agencia;
             Numero = numero;
+            Titular = new Cliente();
         }
 
         public void Depositar(double valor)
